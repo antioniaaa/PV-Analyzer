@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+  <groupId>de.anton.pv.analyser</groupId>
+  <artifactId>pv-analyzer</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+
+  <name>pv-analyzer</name>
+  <description>A simple pv-analyzer using custom clustering/outlier detection.</description>
+  <url>http://www.example.com</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+    <!-- Dependency Versions -->
+    <poi.version>5.2.5</poi.version>
+    <jfreechart.version>1.5.4</jfreechart.version>
+    <slf4j.version>1.7.36</slf4j.version> <!-- Oder 2.x: 2.0.13 -->
+    <smile.version>3.0.1</smile.version> <!-- Optional -->
+    <junit.version>4.13.2</junit.version>
+    <commons.math3.version>3.6.1</commons.math3.version> <!-- Optional -->
+  </properties>
+
+  <dependencies>
+    <!-- JUnit -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Apache POI -->
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+      <version>${poi.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-ooxml</artifactId>
+      <version>${poi.version}</version>
+    </dependency>
+
+    <!-- JFreeChart -->
+    <dependency>
+      <groupId>org.jfree</groupId>
+      <artifactId>jfreechart</artifactId>
+      <version>${jfreechart.version}</version>
+    </dependency>
+
+    <!-- Smile Core (Optional) -->
+    <dependency>
+      <groupId>com.github.haifengl</groupId>
+      <artifactId>smile-core</artifactId>
+      <version>${smile.version}</version>
+    </dependency>
+
+     <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.17.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.17.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>2.17.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.32</version>
+        </dependency>
+
+<dependency>
+    <groupId>org.jfree</groupId>
+    <artifactId>jfreechart</artifactId>
+    <version>1.5.4</version> <!-- Oder aktuellste Version -->
+</dependency>
+<!-- JCommon ist oft eine transitive Abhängigkeit, aber manchmal explizit nötig -->
+  <!--
+    <dependency>
+        <groupId>org.jfree</groupId>
+        <artifactId>jcommon</artifactId>
+        <version>1.0.24</version>
+    </dependency>
+    -->
+
+    <!-- Apache Commons Math 3 (Optional) -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-math3</artifactId>
+      <version>${commons.math3.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <pluginManagement>
+       <plugins>
+        <plugin><artifactId>maven-clean-plugin</artifactId><version>3.4.0</version></plugin>
+        <plugin><artifactId>maven-resources-plugin</artifactId><version>3.3.1</version></plugin>
+        <plugin><artifactId>maven-compiler-plugin</artifactId><version>3.13.0</version></plugin>
+        <plugin><artifactId>maven-surefire-plugin</artifactId><version>3.3.0</version></plugin>
+        <plugin><artifactId>maven-jar-plugin</artifactId><version>3.4.2</version></plugin>
+        <plugin><artifactId>maven-install-plugin</artifactId><version>3.1.2</version></plugin>
+        <plugin><artifactId>maven-deploy-plugin</artifactId><version>3.1.2</version></plugin>
+        <plugin><artifactId>maven-site-plugin</artifactId><version>3.12.1</version></plugin>
+        <plugin><artifactId>maven-project-info-reports-plugin</artifactId><version>3.6.1</version></plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
+           <compilerArgs>
+                <arg>-Xlint:all</arg>
+                <arg>-Xlint:-serial</arg>
+                <arg>-Xlint:-deprecation</arg>
+          </compilerArgs>
+        </configuration>
+      </plugin>
+      <!-- Optional Shade Plugin -->
+      <!--
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.5.2</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>de.anton.pv.analyser.pv_analyzer.App</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      -->
+    </plugins>
+  </build>
+
+  <reporting>
+      <plugins><plugin><artifactId>maven-project-info-reports-plugin</artifactId></plugin></plugins>
+  </reporting>
+</project>
