@@ -75,6 +75,7 @@
                 <transformer>
                   <mainClass>de.anton.pv.analyser.pv_analyzer.App</mainClass>
                 </transformer>
+                <transformer />
               </transformers>
               <filters>
                 <filter>
