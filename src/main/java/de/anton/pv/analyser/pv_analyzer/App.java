@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import javax.swing.*;
 
 /**
- * Main application class. Sets up the MVC components and starts the GUI.
+ * Main application class. Sets up the MVC components and starts the GUI. This...
  */
 public class App {
     private static final Logger logger = LoggerFactory.getLogger(App.class);
