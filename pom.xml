@@ -147,9 +147,12 @@
             </goals>
             <configuration>
               <transformers>
+              <!-- Dieser Transformer setzt die Main-Klasse -->
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <mainClass>de.anton.pv.analyser.pv_analyzer.App</mainClass>
                 </transformer>
+                <!-- Dieser Transformer führt META-INF/services/* Dateien korrekt zusammen -->
+                    <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
               </transformers>
                <!-- Optional: Verhindert Warnungen bei signierten JARs (falls nicht benötigt) -->
                             <filters>
