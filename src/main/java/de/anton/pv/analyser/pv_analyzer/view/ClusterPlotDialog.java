@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.event.InputEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class ClusterPlotDialog extends JDialog {
 
     private static final Logger logger = LoggerFactory.getLogger(ClusterPlotDialog.class);
 
-    private final ChartPanel chartPanel;
+    private ChartPanel chartPanel;
     private final JFreeChart scatterPlot;
     private final XYSeriesCollection dataset;
     private String currentXVarName = "?";
@@ -75,20 +76,33 @@ public class ClusterPlotDialog extends JDialog {
         super(owner, "Cluster Analyse - Scatter Plot", false);
         dataset = new XYSeriesCollection();
         scatterPlot = createChart(dataset);
-        chartPanel = new ChartPanel(scatterPlot);
-        chartPanel.setPreferredSize(new Dimension(800, 600));
+        
+     // Initialize the components of the dialog
+        initComponents(scatterPlot);
 
-        // --- NEU: Double Buffering deaktivieren ---
-        //System.out.println(">>> DEBUG: Disabling Double Buffering on ChartPanel");
-        chartPanel.setDoubleBuffered(false);
-        // ----------------------------------------
+        // Set default close operation (dispose the window, don't exit the app)
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-        chartPanel.setMouseWheelEnabled(true);
-        chartPanel.setDomainZoomable(true);
-        chartPanel.setRangeZoomable(true);
-        chartPanel.setMouseZoomable(false);
-        chartPanel.setPopupMenu(null);
-        chartPanel.setInitialDelay(0);
+        // Pack the components to preferred size
+        pack();
+
+        // Center the dialog relative to its owner
+        setLocationRelativeTo(owner);
+        
+//        chartPanel = new ChartPanel(scatterPlot);
+//        chartPanel.setPreferredSize(new Dimension(800, 600));
+//
+//        // --- NEU: Double Buffering deaktivieren ---
+//        //System.out.println(">>> DEBUG: Disabling Double Buffering on ChartPanel");
+//        chartPanel.setDoubleBuffered(false);
+//        // ----------------------------------------
+//
+//        chartPanel.setMouseWheelEnabled(true);
+//        chartPanel.setDomainZoomable(true);
+//        chartPanel.setRangeZoomable(true);
+//        chartPanel.setMouseZoomable(false);
+//        chartPanel.setPopupMenu(null);
+//        chartPanel.setInitialDelay(0);
 
 //        // *** DEBUG Listeners (unverändert) ***
 //        chartPanel.addMouseListener(new MouseAdapter() {
@@ -397,4 +411,71 @@ public class ClusterPlotDialog extends JDialog {
             }
         }
     }
+    
+    /**
+     * Initializes the graphical components of the dialog.
+     *
+     * @param chart The chart to be displayed in the ChartPanel.
+     */
+    private void initComponents(JFreeChart chart) {
+        // Create the ChartPanel to display the chart
+        // If the passed chart is null, create an empty panel initially
+        chartPanel = new ChartPanel(chart);
+
+        // --- Enable Zooming and Panning ---
+        chartPanel.setMouseZoomable(true, true); // Allow zooming on both axes
+        chartPanel.setMouseWheelEnabled(true);   // Allow zooming using the mouse wheel
+        // Panning is typically enabled by default with zooming (e.g., right-click drag or Ctrl+drag)
+        
+     
+//      // --- NEU: Double Buffering deaktivieren ---
+//      //System.out.println(">>> DEBUG: Disabling Double Buffering on ChartPanel");
+//      chartPanel.setDoubleBuffered(false);
+//      // ----------------------------------------
+//
+//      chartPanel.setMouseWheelEnabled(true);
+//      chartPanel.setDomainZoomable(true);
+//      chartPanel.setRangeZoomable(true);
+//      chartPanel.setMouseZoomable(false);
+//      chartPanel.setPopupMenu(null);
+//      chartPanel.setInitialDelay(0);
+        
+        
+        // Set a preferred size for the chart panel (adjust as needed)
+        chartPanel.setPreferredSize(new Dimension(800, 600));
+
+        // Use BorderLayout for the dialog's content pane
+        setLayout(new BorderLayout());
+
+        // Add the ChartPanel to the center of the dialog
+        add(chartPanel, BorderLayout.CENTER);
+
+        // --- Optional: Add a close button ---
+        JButton closeButton = new JButton("Schließen");
+        closeButton.addActionListener(e -> dispose()); // Close the dialog on button click
+
+        // Create a panel for the button to prevent it from stretching
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.add(closeButton);
+
+        // Add the button panel to the bottom of the dialog
+        add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+    /**
+     * Updates the chart displayed in the dialog.
+     * Can be used if the dialog is reused to show different charts.
+     *
+     * @param newChart The new JFreeChart to display.
+     */
+    public void updateChart(JFreeChart newChart) {
+        chartPanel.setChart(newChart);
+        // Optional: Reset zoom/pan when a new chart is loaded
+        if (newChart != null) {
+            chartPanel.restoreAutoBounds();
+        }
+    }
+    
+    
+    
 }
