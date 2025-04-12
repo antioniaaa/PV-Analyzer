@@ -167,6 +167,44 @@
         </executions>
       </plugin>
      
+     <!-- ... example-Ordner außerhalb des jar-package ... -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-resources-plugin</artifactId>
+            <version>3.3.1</version> <!-- Verwenden Sie eine aktuelle Version -->
+            <executions>
+                <execution>
+                    <id>copy-external-resources</id>
+                    <!-- Phase nach dem Kompilieren, aber vor dem Packen -->
+                    <phase>prepare-package</phase>
+                    <goals>
+                        <goal>copy-resources</goal>
+                    </goals>
+                    <configuration>
+                        <!-- Zielverzeichnis: Das 'target'-Verzeichnis -->
+                        <outputDirectory>${project.build.directory}</outputDirectory>
+                        <resources>
+                            <resource>
+                                <!-- Quellverzeichnis: Der 'example'-Ordner im Projekt-Root -->
+                                <directory>${project.basedir}/example</directory>
+                                <!-- Gibt den Zielpfad RELATIV zum outputDirectory an -->
+                        		<targetPath>example</targetPath>
+                                <!-- Wichtig: Nicht filtern, da es sich um beliebige Dateien handeln kann -->
+                                <filtering>false</filtering>
+                                <!-- Optional: Explizit alles einschließen -->
+                                <!--
+                                <includes>
+                                    <include>**/*</include>
+                                </includes>
+                                -->
+                            </resource>
+                        </resources>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+     
+     
     </plugins>
   </build>
 
