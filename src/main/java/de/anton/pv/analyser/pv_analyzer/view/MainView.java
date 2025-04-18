@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class MainView extends JFrame {
 
-    private File currentDirectory = new File("./example");
+    private File currentDirectory = new File("./PV-Anlagen");
 
     // --- UI Components ---
     private JButton btnLoadFile;

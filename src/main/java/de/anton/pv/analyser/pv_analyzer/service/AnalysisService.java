@@ -177,9 +177,26 @@ public class AnalysisService {
             	 String powerKey = trackerName + "/DC-Leistung(kW)"; 
             	 String voltageKey = trackerName + "/DC-Spannung(V)"; 
             	 Double powerKW = dataRow.getOrDefault(powerKey, Double.NaN); 
+            	 //because of variability in the Variable names
+            	 if(Double.isNaN(powerKW)) {
+            		 powerKey = trackerName + " /DC-Leistung(kW)"; 
+            		 powerKW = dataRow.getOrDefault(powerKey, Double.NaN); 
+            	 }
             	 Double voltageV = dataRow.getOrDefault(voltageKey, Double.NaN);
+            	 if(Double.isNaN(voltageV)) {
+            		 voltageKey = trackerName + " /DC-Spannung(V)"; 
+            		 voltageV = dataRow.getOrDefault(voltageKey, Double.NaN);
+            	 }
+            	 
+            	 if(trackerName.equals("TR#24.4")) {
+            		 System.out.println(trackerName+": "+ powerKW+"; "+voltageV);
+            	 }
             	 
                  if (!Double.isNaN(powerKW) && !Double.isNaN(voltageV) && powerKW > MIN_POWER_THRESHOLD_KW) {
+                	 
+                	 //TR#02.1 /DC-Leistung(kW)
+                	 //TR#01.4/DC-Leistung(kW)
+                	 
                      double scaledPower = powerIsConstant ? 0.5 : ((powerRange < MIN_MAX_EPSILON) ? 0.5 : (powerKW - globalMinPower) / powerRange);
                      //double scaledVoltage = voltageIsConstant ? 0.5 : ((voltageRange < MIN_MAX_EPSILON) ? 0.5 : (voltageV - globalMinVoltage) / voltageRange);
                      
@@ -195,8 +212,11 @@ public class AnalysisService {
                     	 }
                  }
              }
-             if (bestTimestamp != null) { maxVectorPoints.add(new CalculatedDataPoint( trackerName, bestRawPower, bestRawVoltage, trackerInfo, modInfo, bestTimestamp )); }
-             else { logger.warn("Service: No valid point meeting criteria found for tracker {} in interval.", trackerName); }
+             if (bestTimestamp != null) { 
+            	 maxVectorPoints.add(new CalculatedDataPoint( trackerName, bestRawPower, bestRawVoltage, trackerInfo, modInfo, bestTimestamp )); 
+             } else { 
+            	 logger.warn("Service: No valid point meeting criteria found for tracker {} in interval.", trackerName); 
+             }
          }
          maxVectorPoints.sort(Comparator.comparing(CalculatedDataPoint::getName, Comparator.nullsLast(String::compareTo)));
          return maxVectorPoints;
